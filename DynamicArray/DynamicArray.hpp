@@ -10,28 +10,19 @@
 
 #include "NodeTemplate.hpp"
 
-
 template <typename T>
 class DynamicArray {
-    
 private:
     Node<T>* _nodes;
-    
-    int _node_capacity;
     int _size;
-    int _node_count;
-    
+    int _capacity;
 public:
     DynamicArray();
-    DynamicArray(int node_capacity);
     ~DynamicArray();
-    
     T& operator[](int position);
     void append(T item);
-    void delete_item(int index);
-    
-    int size();
-    
+    int get_size();
+    void print();
 };
 
 #endif /* DynamicArray_hpp */

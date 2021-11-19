@@ -10,31 +10,21 @@
 
 #include <stdio.h>
 
-
 template <typename T>
 class Node {
-    
 private:
-    // Массив элементов
     T* _items;
-    
-    // Максимальная вместимость
     int _capacity;
-    
-    // Фактическая заплненность ноды
     int _size;
     
 public:
     Node();
     Node(int capacity);
     ~Node();
-    
-    bool try_append(T new_item);
-    
+    void append(T new_item);
     T& operator[](int position);
-    
-    int size();
-    
+    int get_size();
+    void print();
 };
 
 #endif /* Node_hpp */

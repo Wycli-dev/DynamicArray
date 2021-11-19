@@ -10,16 +10,13 @@
 
 #include "DynamicArray.hpp"
 
-#define STANDARD_NODE_COUNT 0
-
+#define STANDARD_ARRAY_CAPACITY 10
 
 template <typename T>
 DynamicArray<T>::DynamicArray() {
-    _node_capacity = STANDARD_NODE_CAPACITY;
     _size = 0;
-    _node_count = STANDARD_NODE_COUNT;
-    
-    int memory_usage = _node_count * sizeof(Node<T>(_node_capacity));
+    _capacity = STANDARD_ARRAY_CAPACITY;
+    int memory_usage = _capacity * sizeof(Node<T>);
     _nodes = (Node<T>*)malloc(memory_usage);
 }
 
@@ -29,57 +26,44 @@ DynamicArray<T>::~DynamicArray(){
 }
 
 template <typename T>
-DynamicArray<T>::DynamicArray(int node_capacity) {
-    _node_capacity = node_capacity;
-    _size = 0;
-    _node_count = STANDARD_NODE_COUNT;
-    
-    int memory_usage = _node_count * sizeof(Node<T>(_node_capacity));
-    _nodes = (Node<T>*)malloc(memory_usage);
-}
-
-template <typename T>
 T& DynamicArray<T>::operator[](int position) {
     if (position >= 0 && position < _size){
-        int node_index = position / _node_capacity;
-        int item_index = position % _node_capacity;
-        
-        T& item_ref = _nodes[node_index].operator[](item_index);
+        int node_index = position / STANDARD_NODE_CAPACITY;
+        int item_index = position % STANDARD_NODE_CAPACITY;
+        T& item_ref = _nodes[node_index][item_index];
         return item_ref;
     }
-    
+    std::cout << "Dynamic Array index out of range" << std::endl;
     exit(0);
 }
 
 template <typename T>
 void DynamicArray<T>::append(T new_item) {
-    bool need_new_node = ((_size + 1) % _node_capacity == 1) &&
-                         (_node_count * _node_capacity == _size);
-    
-    if (need_new_node) {
-        _node_count++;
-        int memory_usage =_node_count * sizeof(Node<T>(_node_capacity));
+    if (_size + 1 == _capacity * STANDARD_NODE_CAPACITY) {
+        _capacity++;
+        int memory_usage = _capacity * sizeof(Node<T>);
         _nodes = (Node<T>*)realloc((void*) _nodes, memory_usage);
-
     }
-    
-    bool need_init = ((_size + 1) % _node_capacity == 1);
-    
-    if (need_init){
-        int index = _size / _node_capacity;
-        _nodes[index] = Node<T>(_node_capacity);
+    if (_size % STANDARD_NODE_CAPACITY == 0){
+        int index = _size / STANDARD_NODE_CAPACITY;
+        _nodes[index] = Node<T>();
     }
-    
+    int node_index = _size / STANDARD_NODE_CAPACITY;
+    _nodes[node_index].append(new_item);
     _size++;
-    int node_index = _size / _node_capacity;
-    _nodes[node_index].try_append(new_item);
-    
 }
 
 template <typename T>
-int DynamicArray<T>::size(){
+int DynamicArray<T>::get_size(){
     return _size;
 }
 
+template <typename T>
+void DynamicArray<T>::print() {
+    std::cout << "DynamicArray: " << std::endl;
+    for(int i = 0; i < _size; i++){
+        _nodes[i].print();
+    }
+}
 
 #endif /* DynamicArrayTemplate_hpp */

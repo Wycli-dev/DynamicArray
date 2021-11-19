@@ -6,18 +6,21 @@
 //
 
 #include <iostream>
+#include "Node.hpp"
+#include "NodeTemplate.hpp"
+#include "DynamicArray.hpp"
 #include "DynamicArrayTemplate.hpp"
 
 int main(int argc, const char * argv[]) {
-    DynamicArray<int>* test = new DynamicArray<int>();
-    test->append(12);
-    test->append(24);
-    int &result = test->operator[](1);
+    DynamicArray<int> test = DynamicArray<int>();
+    test.print();
 
+    test.append(1);
+    test.append(2);
+    test.append(3);
 
-    std::cout << "num: " << result << std::endl;
+    test.print();
 
-    delete test;
     
     
     return 0;
